@@ -1,4 +1,4 @@
-# Adventure Game
+# Adventure Game "Adventure Dime" :P
 
 This is a simple text-based adventure game where the player navigates a grid to collect clues and find a hidden dime to win the game.
 
