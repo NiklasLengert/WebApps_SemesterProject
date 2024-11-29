@@ -2,7 +2,10 @@
 const GRID_SIZE = 6;
 
 // Initialize the game world
-let gameWorld = Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(null));
+let gameWorld = [];
+for (let i = 0; i < GRID_SIZE; i++) {
+    gameWorld[i] = new Array(GRID_SIZE).fill(null);
+}
 
 // Define player starting position
 let playerPosition = { x: 5, y: 5 };
@@ -27,7 +30,7 @@ function placeItemRandomly(type) {
     return { x, y };
 }
 
-// Initialize the obstacles and clues in random positions
+// Create the obstacles and clues in random positions
 for (let i = 0; i < 3; i++) {
     obstacles.push(placeItemRandomly("obstacle"));
     clues.push(placeItemRandomly("clue"));
@@ -57,8 +60,16 @@ function describeCurrentState() {
 
 // Function to check if the player can move to a specific tile
 function canMove(x, y) {
-    if (x < 0 || x >= GRID_SIZE || y < 0 || y >= GRID_SIZE) return false; // Out of bounds
-    return !obstacles.some(obstacle => obstacle.x === x && obstacle.y === y); // Blocked by obstacle
+    // All out of bounds scenarios
+    if (x < 0 || x >= GRID_SIZE || y < 0 || y >= GRID_SIZE) return false;
+
+    // Blocked by obstacle
+    for (let i = 0; i < obstacles.length; i++) {
+        if (obstacles[i].x === x && obstacles[i].y === y) {
+            return false;
+        }
+    }
+    return true;
 }
 
 // Function to move the player in the specified direction
@@ -87,7 +98,7 @@ function triggerObstacles() {
     obstacles.forEach(obstacle => {
         if (Math.random() < 0.25) { // 25% chance for each obstacle to "trigger"
             console.log("An obstacle has shifted, blocking new paths!");
-            // Obstacle blocking behavior can be customized here
+            // Further customization required
         }
     });
 }
@@ -97,13 +108,13 @@ function getDialog(){
     
 }
 
-// Main game loop
+// Game loop
 function gameLoop() {
     const readline = require('readline').createInterface({
         input: process.stdin,
         output: process.stdout
     });
-
+ 
     function askForMove() {
         readline.question("Enter direction (up, down, left, right): ", (direction) => {
             const gameEnded = movePlayer(direction);
